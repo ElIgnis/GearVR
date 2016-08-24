@@ -10,7 +10,6 @@ public class PlayerActions : MonoBehaviour
 	InteractableObjects _interactableObject;
 	float _grabTimer;
 	bool _lookingAtGlassCup;
-	Vector3 throwAngle;
 
     #endregion
 
@@ -24,6 +23,7 @@ public class PlayerActions : MonoBehaviour
 	public float grabSpeed;
 
 	public float throwForce;
+    public float throwAngle;
 
 	public bool lookingAtGlassCup { get { return _lookingAtGlassCup; } }
 
@@ -60,11 +60,8 @@ public class PlayerActions : MonoBehaviour
         else
         {
             //Apply force and throw object in an arc
-			Vector3 throwingAngle = new Vector3(0, 15, 0);
-			throwingAngle.Normalize ();
-			throwAngle = (gameObject.transform.forward + throwingAngle);
-			throwAngle.Normalize ();
-			_currentRB.AddForce (throwAngle * throwForce);
+			Vector3 throwDirection = Quaternion.AngleAxis(throwAngle, gameObject.transform.right) * gameObject.transform.up;
+			_currentRB.AddForce (throwDirection * throwForce);
 			ReleaseObject ();
         }
     }
@@ -110,26 +107,33 @@ public class PlayerActions : MonoBehaviour
 		StopCoroutine ("MoveObjectTowardsPlayer");
     }
 
+    IEnumerator CheckLookObject()
+    {
+        while (_currentObject != null)
+        {
+            RaycastHit hit;
+            Ray ray = new Ray(transform.position, transform.forward);
+
+            //Assign object as current object
+            if (Physics.Raycast(ray, out hit, 10000))
+            {
+                if (hit.collider.gameObject.name == "Glass Cup")
+                {
+                    _lookingAtGlassCup = true;
+                }
+            }
+            else {
+                _lookingAtGlassCup = false;
+            }
+            //Check at preferred frame interval
+            yield return new WaitForSeconds(frameInterval * Time.deltaTime);
+        }
+    }
     #endregion
 
-	IEnumerator CheckLookObject()
-	{
-		while (_currentObject != null) {
-			RaycastHit hit;
-			Ray ray = new Ray (transform.position, transform.forward);
 
-			//Assign object as current object
-			if (Physics.Raycast (ray, out hit, 10000)) {
-				if (hit.collider.gameObject.name == "Glass Cup") {
-					_lookingAtGlassCup = true;
-				} 
-			}
-			else {
-				_lookingAtGlassCup = false;
-			}
-			//Check at preferred frame interval
-			yield return new WaitForSeconds(frameInterval * Time.deltaTime);
-		}
-	}
-
+    void Start()
+    {
+        throwAngle = 90 - throwAngle;
+    }
 }
