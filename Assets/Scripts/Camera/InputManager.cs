@@ -23,7 +23,7 @@ public class InputManager : MonoBehaviour
 		switch (touchArg.TouchType) {
 		case OVRTouchpad.TouchEvent.SingleTap:
 			UpdateInteraction ();
-			debugText.text = "Tap";
+			//debugText.text = "Tap";
 			break;
 		case OVRTouchpad.TouchEvent.Up:
 			debugText.text = "Up";
@@ -43,16 +43,34 @@ public class InputManager : MonoBehaviour
 
 	void UpdateInteraction ()
 	{
+        debugText.text = _playerActions.lookingAtGlassCup + "";
 		if (_playerActions.IsHoldingObject ()) {
 
 			//Release the object if not looking at glass cup
 			if (!_playerActions.lookingAtGlassCup)
-				_playerActions.ReleaseObject ();
+            {
+                
+                _playerActions.ReleaseObject();
+            }
 			else
-				_playerActions.PourDrinks ();
+            {
+                _playerActions.MixDrinks();
+            }
 		}
 			
 		else
 			_playerActions.GrabObject ();
 	}
+
+    void Update()
+    {
+        _playerActions.DrinkObject();
+
+        if (_playerActions.IsHoldingObject())
+            _playerActions.MoveObjectTowardsPlayer();
+        //FPS
+        //debugText.text = "DT = " + Time.deltaTime + "\nFPS = " + 1 / Time.deltaTime;
+
+        debugText.text = gameObject.transform.forward + "";
+    }
 }
