@@ -69,8 +69,8 @@ public class InputManager : MonoBehaviour
         if (_playerActions.IsHoldingObject())
             _playerActions.MoveObjectTowardsPlayer();
         //FPS
-        //debugText.text = "DT = " + Time.deltaTime + "\nFPS = " + 1 / Time.deltaTime;
+        debugText.text = "DT = " + Time.deltaTime + "\nFPS = " + 1 / Time.deltaTime;
 
-        debugText.text = gameObject.transform.forward + "";
+        //debugText.text = gameObject.transform.forward + "";
     }
 }
