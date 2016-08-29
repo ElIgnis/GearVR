@@ -4,7 +4,7 @@ using System.Collections;
 
 public class InputManager : MonoBehaviour
 {
-
+    public GameObject humanModel;
 	public TextMesh debugText;
 	PlayerActions _playerActions;
 
@@ -23,7 +23,7 @@ public class InputManager : MonoBehaviour
 		switch (touchArg.TouchType) {
 		case OVRTouchpad.TouchEvent.SingleTap:
 			UpdateInteraction ();
-			//debugText.text = "Tap";
+			debugText.text = "Tap";
 			break;
 		case OVRTouchpad.TouchEvent.Up:
 			debugText.text = "Up";
@@ -64,13 +64,14 @@ public class InputManager : MonoBehaviour
 
     void Update()
     {
-        _playerActions.DrinkObject();
+        //_playerActions.DrinkObject();
 
-        if (_playerActions.IsHoldingObject())
-            _playerActions.MoveObjectTowardsPlayer();
+        //if (_playerActions.IsHoldingObject())
+        //    _playerActions.MoveObjectTowardsPlayer();
         //FPS
         debugText.text = "DT = " + Time.deltaTime + "\nFPS = " + 1 / Time.deltaTime;
 
         //debugText.text = gameObject.transform.forward + "";
+        //humanModel.transform.localEulerAngles = new Vector3(humanModel.transform.rotation.x, Camera.main.transform.rotation.y, humanModel.transform.rotation.z);
     }
 }

@@ -47,7 +47,6 @@ public class PlayerActions : MonoBehaviour
     {
         if (_currentObject == null)
         {
-
             RaycastHit hit;
             Ray ray = new Ray(transform.position, transform.forward);
 
@@ -57,6 +56,7 @@ public class PlayerActions : MonoBehaviour
                 //Check if object is interactable
                 if (hit.collider.gameObject.GetComponent<InteractableObjects>() != null)
                 {
+                    Debug.Log("Hit");
                     _currentObject = hit.collider.gameObject;
                     _currentObject.transform.rotation = Quaternion.identity;
                     _currentRB = _currentObject.GetComponent<Rigidbody>();
