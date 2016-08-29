@@ -66,7 +66,7 @@ public class InputManager : MonoBehaviour
             }
 			else
             {
-                _playerActions.MixDrinks();
+                //_playerActions.MixDrinks();
             }
 		}
 			
