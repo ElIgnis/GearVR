@@ -66,17 +66,20 @@ public class PlayerScript : MonoBehaviour
     #endregion
 
     #region FOR_TOUCH
-    private Color touchColor;
+
     public float distance = 0.1f;
 
+    #endregion
+
+    #region FOR_DEBUG
+
+    //public TextMesh _txtSrc1, _txtSrc2, _txtCompost, _txtCurrentAlcoholContent;
 
     #endregion
 
 
-    public Text _txtSrc1, _txtSrc2, _txtCompost, _txtCurrentAlcoholContent;
-
     private Drinks _src1, _src2, _compost;
-    private int _currentAlcoholContent;
+    private int _alcoholContent1, _alcoholContent2;
 
     private DrinkStatusScript _temp = null;
 
@@ -120,10 +123,10 @@ public class PlayerScript : MonoBehaviour
 
         _src1 = _src2 = _compost = Drinks.EMPTY;
 
-        _txtSrc1.text = "Src1 = Nothing";
-        _txtSrc2.text = "Src2 = Nothing";
-        _txtCompost.text = "Compost = Nothing";
-        _txtCurrentAlcoholContent.text = "CAC = Nothing";
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Confined;
+
+   //     DisplaySelectedDrinks();
     }
 
     void Update()
@@ -137,59 +140,46 @@ public class PlayerScript : MonoBehaviour
         }
         #endregion
 
-        #region TOUCH_METHOD
+        //#region TOUCH_METHOD
 
-        if (Input.GetMouseButtonDown(0))
-        {
-            Ray r = Camera.main.ScreenPointToRay(Input.mousePosition);
-            RaycastHit hit = new RaycastHit();
+        //if (Input.GetMouseButtonDown(0))
+        //{
+        //    Ray r = Camera.main.ScreenPointToRay(Input.mousePosition);
+        //    RaycastHit hit = new RaycastHit();
 
-            if (Physics.Raycast(r, out hit, distance))
-            {
-                // Get object when you touch it
-                GameObject obj = hit.collider.gameObject;
+        //    if (Physics.Raycast(r, out hit, distance))
+        //    {
+        //        // Get object when you touch it
+        //        GameObject obj = hit.collider.gameObject;
 
-                #region GET_OBJ_COLOR_METHOD
-                touchColor = obj.GetComponent<Renderer>().material.color;
-                Debug.Log(touchColor);
-                #endregion
+        //        #region GET_OBJ_ALCOHOL_TYPE_METHOD
 
-                #region GET_OBJ_ALCOHOL_TYPE_METHOD
+        //        if (_temp = obj.GetComponent<DrinkStatusScript>())
+        //            if (_src1 == Drinks.EMPTY){
+        //                _src1 = _temp.GetDrinkType();
+        //                _alcoholContent1 = _temp.GetAlcoholContent();}
+        //            else if (_src2 == Drinks.EMPTY) { 
+        //                _src2 = _temp.GetDrinkType();
+        //                _alcoholContent2 = _temp.GetAlcoholContent();}
 
-                if (_temp = obj.GetComponent<DrinkStatusScript>())
-                    if (_src1 == Drinks.EMPTY){
-                        _src1 = _temp.GetAlcoholType();
-                        _currentAlcoholContent += _temp.GetAlcoholContent();}
-                    else if (_src2 == Drinks.EMPTY){
-                        _src2 = _temp.GetAlcoholType();
-                       _currentAlcoholContent += _temp.GetAlcoholContent();}
+        //        #endregion
+        //}}
 
-                #endregion
-
-                DrinkStatusScript t = obj.GetComponent<DrinkStatusScript>();
-
-                if (t != null)
-                {
-                    Debug.Log(_temp.GetAlcoholType());
-                }
-            }
-
-            DisplaySelectedDrinks();
-        }
-
-        #endregion
+        //#endregion
 
         #region CHECK_COMBINATION
 
         if (_src2 != Drinks.EMPTY)
             if (_src1 != Drinks.EMPTY) {
                 Debug.Log("Let's mix");
-                _compost = MixDrinks(_src1, _src2);
-                DisplaySelectedDrinks();}
+                // If you forget this if statement, this game to become heavy
+                if (_compost == Drinks.EMPTY)
+                    _compost = MixDrinks(_src1, _src2);}
         
-            
-
         #endregion
+
+  //      DisplaySelectedDrinks();
+
         }
 
     public void DeselectDrink()
@@ -199,13 +189,9 @@ public class PlayerScript : MonoBehaviour
             _compost = Drinks.EMPTY;}
         else if (_src1 != Drinks.EMPTY)
             _src1 = Drinks.EMPTY;
-
-
-        DisplaySelectedDrinks();
     }
 
     public Drinks MixDrinks(Drinks src1, Drinks src2){
-        _currentAlcoholContent = AddAlcoholContent(src1, src2);
 
         if (src1 == src2)
             return src1;
@@ -230,19 +216,13 @@ public class PlayerScript : MonoBehaviour
         return Drinks.WASTE;
     }
 
-    private int AddAlcoholContent(Drinks src1, Drinks src2)
-    {
-        _temp = GetComponent<DrinkStatusScript>();
-        _temp.GetAlcoholContent();
-        return 0;
-    }
-
-   public void DisplaySelectedDrinks() {
-        _txtSrc1.text = "Src1 = " + DrinkExt.DisplayName(_src1);
-        _txtSrc2.text = "Src2 = " + DrinkExt.DisplayName(_src2);
-        _txtCompost.text = "Compost = " + DrinkExt.DisplayName(_compost);
-        _txtCurrentAlcoholContent.text = "CAC = " + _currentAlcoholContent;
-   }
+   //public void DisplaySelectedDrinks() {
+   //    int sum = _alcoholContent1 + _alcoholContent2;
+   //     _txtSrc1.text = "Src1 = " + DrinkExt.DisplayName(_src1);
+   //     _txtSrc2.text = "Src2 = " + DrinkExt.DisplayName(_src2);
+   //     _txtCompost.text = "Compost = " + DrinkExt.DisplayName(_compost);
+   //     _txtCurrentAlcoholContent.text = "CAC = " + sum.ToString() ;
+   //}
 }
 
 static class DrinkExt{
@@ -280,3 +260,4 @@ static class DrinkExt{
 
         return _names[(int)drink];}
 };
+

@@ -26,7 +26,7 @@ public class DrinkStatusScript : MonoBehaviour {
 	
 	}
 
-    public Drinks GetAlcoholType()
+    public Drinks GetDrinkType()
     {
         return _type;
     }
@@ -38,6 +38,13 @@ public class DrinkStatusScript : MonoBehaviour {
 
     public int GetAlcoholContent()
     {
-        return AlcoholContent[(int)_type];
+        // The 5 is first number of Alcohol in enum statement.
+
+        // If it is any alcohols
+        if ((int)_type >= 5 || (int)_type <= 12)
+            return AlcoholContent[(int)_type - 5];
+
+        // Non-alcohol
+        return 0;
     }
 }

@@ -1,5 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
+
+
 
 public class PlayerActions : MonoBehaviour
 {
@@ -12,6 +15,13 @@ public class PlayerActions : MonoBehaviour
     bool _lookingAtGlassCup;
     bool _holdingDrink;
     bool _ableToDrink;
+
+    private Drinks _src1, _src2, _compost;
+    private int _alcoholContent1, _alcoholContent2;
+
+    private DrinkStatusScript _temp = null;
+
+    public List<ChartData> _cd = new List<ChartData>();
 
     #endregion
 
@@ -40,23 +50,28 @@ public class PlayerActions : MonoBehaviour
     public GameObject currentObject { get { return _currentObject; } }
 
     public TextMesh debugText;
+    public TextMesh _txtSrc1, _txtSrc2, _txtCompost, _txtCurrentAlcoholContent;
     #endregion
 
     #region [ Public Methods ]
     public void GrabObject()
     {
+        // If you don't have anything
         if (_currentObject == null)
         {
             RaycastHit hit;
             Ray ray = new Ray(transform.position, transform.forward);
 
+            int touchableDistance = 1000;
+
             //Assign object as current object
-            if (Physics.Raycast(ray, out hit, 1000))
+            if (Physics.Raycast(ray, out hit, touchableDistance))
             {
+
+                Debug.Log("aaaa");
                 //Check if object is interactable
                 if (hit.collider.gameObject.GetComponent<InteractableObjects>() != null)
                 {
-                    Debug.Log("Hit");
                     _currentObject = hit.collider.gameObject;
                     _currentObject.transform.rotation = Quaternion.identity;
                     _currentRB = _currentObject.GetComponent<Rigidbody>();
@@ -65,9 +80,25 @@ public class PlayerActions : MonoBehaviour
                     _interactableObject = _currentObject.GetComponent<InteractableObjects>();
                     MoveObjectTowardsPlayer();
                     StartCoroutine("CheckLookObject");
+                    ///////////////////////////////////////////////
+                    if (_temp = _currentObject.GetComponent<DrinkStatusScript>())
+                        if (_src1 == Drinks.EMPTY)
+                        {
+                            _src1 = _temp.GetDrinkType();
+                            _alcoholContent1 = _temp.GetAlcoholContent();
+                        }
+
+                    DisplaySelectedDrinks();
+                    /////////////////////////////////////////////////
                 }
             }
         }
+        else
+        {
+
+        }
+
+        
     }
 
     public void ThrowObject()
@@ -206,4 +237,18 @@ public class PlayerActions : MonoBehaviour
     {
         
     }
+
+
+    #region Ryohei
+
+    public void DisplaySelectedDrinks()
+    {
+        int sum = _alcoholContent1 + _alcoholContent2;
+        _txtSrc1.text = "Src1 = " + DrinkExt.DisplayName(_src1);
+        _txtSrc2.text = "Src2 = " + DrinkExt.DisplayName(_src2);
+        _txtCompost.text = "Compost = " + DrinkExt.DisplayName(_compost);
+        _txtCurrentAlcoholContent.text = "CAC = " + sum.ToString();
+    }
+    #endregion
 }
+
