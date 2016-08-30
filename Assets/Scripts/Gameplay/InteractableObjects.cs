@@ -3,6 +3,7 @@ using System.Collections;
 
 	public enum OBJECT_TYPE{
 		DRINKS,
+        COCKTAIL,
 		OTHERS
 	}
 
@@ -14,8 +15,6 @@ using System.Collections;
     }
 
 public class InteractableObjects : MonoBehaviour {
-
-
 
 	public OBJECT_TYPE objectType;
     public DRINK_TYPE drinkType;

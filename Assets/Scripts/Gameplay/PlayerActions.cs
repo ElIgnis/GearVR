@@ -153,7 +153,7 @@ public class PlayerActions : MonoBehaviour
             if (Physics.Raycast(ray, out hit, touchableDistance))
             {
                 //Check if object is interactable
-                if (hit.collider.gameObject.GetComponent<InteractableObjects>() != null)
+                if (hit.collider.gameObject.GetComponent<InteractableObjects>() != null && hit.collider.gameObject.tag != "Cocktail")
                 {
                     _currentObject = hit.collider.gameObject;
                     _currentObject.transform.rotation = Quaternion.identity;
@@ -247,6 +247,7 @@ public class PlayerActions : MonoBehaviour
         _currentObject.transform.position = Vector3.Lerp(_currentObject.transform.position, handTransform.position, grabSpeed * Time.deltaTime);
         _currentObject.transform.parent = handTransform;
         _holdingDrink = true;
+        _currentObject.transform.rotation = Camera.main.transform.rotation;
     }
 
     public void DeselectDrink()
@@ -355,7 +356,7 @@ public class PlayerActions : MonoBehaviour
             if (Physics.Raycast(ray, out hit, 1000))
             {
 
-                if (hit.collider.gameObject.tag == "GlassCup")
+                if (hit.collider.gameObject.tag == "Cocktail")
                 {
                     Debug.Log("glass of" + hit.collider.gameObject.GetComponent<InteractableObjects>().GetDrinkType());
                     _lookingAtGlassCup = true;
@@ -396,6 +397,7 @@ public class PlayerActions : MonoBehaviour
                 else
                 {
                     jointTransform.rotation = Quaternion.RotateTowards(jointTransform.rotation, Quaternion.AngleAxis(-135, Camera.main.transform.right), handRotateSpeed * Time.deltaTime);
+                    _currentObject.gameObject.transform.localRotation = jointTransform.rotation;
                     _ableToDrink = true;
                 }
                 break;

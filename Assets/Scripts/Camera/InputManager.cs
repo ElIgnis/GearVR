@@ -79,18 +79,17 @@ public class InputManager : MonoBehaviour
 
     void Update()
     {
-        //_playerActions.DrinkObject();
+        _playerActions.DrinkObject();
 
         if (_playerActions.IsHoldingObject())
             _playerActions.MoveObjectTowardsPlayer();
+        
         //FPS
         //debugText.text = "DT = " + Time.deltaTime + "\nFPS = " + 1 / Time.deltaTime;
 
-        //debugText.text = gameObject.transform.forward + "";
         //humanModel.transform.localEulerAngles = new Vector3(humanModel.transform.rotation.x, Camera.main.transform.rotation.y, humanModel.transform.rotation.z);
 
         _ray = new Ray(transform.position, transform.forward);
-
 
         float touchableDistance = 100;
         //Assign object as current object
