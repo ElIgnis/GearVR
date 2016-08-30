@@ -163,9 +163,10 @@ public class PlayerActions : MonoBehaviour
                     _interactableObject = _currentObject.GetComponent<InteractableObjects>();
                     MoveObjectTowardsPlayer();
                     StartCoroutine("CheckLookObject");
+
                     ///////////////////////////////////////////////
                     if (_temp = _currentObject.GetComponent<InteractableObjects>())
-                        if (_src1 == DRINK_TYPE.EMPTY)
+                        if (_src1 != DRINK_TYPE.EMPTY)
                         {
                             _src1 = _temp.GetDrinkType();
                             _alcoholContent1 = _temp.GetAlcoholContent();
@@ -224,7 +225,6 @@ public class PlayerActions : MonoBehaviour
         //Only can mix drinks
         if (_interactableObject != null && _interactableObject.objectType == OBJECT_TYPE.DRINKS)
         {
-
             //Drink if looking upwards
             if (gameObject.transform.forward.y >= headTiltLevel)
             {
@@ -247,7 +247,7 @@ public class PlayerActions : MonoBehaviour
         _currentObject.transform.position = Vector3.Lerp(_currentObject.transform.position, handTransform.position, grabSpeed * Time.deltaTime);
         _currentObject.transform.parent = handTransform;
         _holdingDrink = true;
-        _currentObject.transform.rotation = Camera.main.transform.rotation;
+        _currentObject.transform.forward = Camera.main.transform.forward;
     }
 
     public void DeselectDrink()
@@ -392,12 +392,11 @@ public class PlayerActions : MonoBehaviour
                 if (reverse)
                 {
                     jointTransform.rotation = Quaternion.RotateTowards(jointTransform.rotation, Camera.main.transform.rotation, handRotateSpeed * Time.deltaTime);
-                     _ableToDrink = false;
+                    _ableToDrink = false;
                 }
                 else
                 {
-                    jointTransform.rotation = Quaternion.RotateTowards(jointTransform.rotation, Quaternion.AngleAxis(-135, Camera.main.transform.right), handRotateSpeed * Time.deltaTime);
-                    _currentObject.gameObject.transform.localRotation = jointTransform.rotation;
+                    jointTransform.localEulerAngles = Vector3.MoveTowards(jointTransform.localEulerAngles, new Vector3(-135, 0, 0), handRotateSpeed * Time.deltaTime);
                     _ableToDrink = true;
                 }
                 break;
@@ -466,7 +465,7 @@ public class PlayerActions : MonoBehaviour
     {
         #region MOVE_METHOD
         //For stop
-        humanModel.transform.rotation = Quaternion.Euler(0, Camera.main.gameObject.transform.localEulerAngles.y, 0);
+        //humanModel.transform.localEulerAngles = new Vector3(0, Camera.main.gameObject.transform.localEulerAngles.y, 0);
 
         // For walk
         //forward = Camera.main.transform.TransformDirection(Vector3.forward);

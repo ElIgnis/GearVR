@@ -33,20 +33,15 @@ public class InputManager : MonoBehaviour
 		switch (touchArg.TouchType) {
 		case OVRTouchpad.TouchEvent.SingleTap:
 			UpdateInteraction ();
-//			debugText.text = "Tap";
 			break;
 		case OVRTouchpad.TouchEvent.Up:
-//			debugText.text = "Up";
 			break;
 		case OVRTouchpad.TouchEvent.Down:
-//			debugText.text = "Down";
 			break;
 		case OVRTouchpad.TouchEvent.Left:
 			_playerActions.ThrowObject ();
-//			debugText.text = "Left";
 			break;
 		case OVRTouchpad.TouchEvent.Right:
-//			debugText.text = "Right";
 			break;
 		}
 	}
@@ -79,11 +74,18 @@ public class InputManager : MonoBehaviour
 
     void Update()
     {
+        //Alternate controls (to be remapped if there is time tomorrow)
+        if (Input.GetKeyDown(KeyCode.A))
+            UpdateInteraction();
+
+        if (Input.GetKeyDown(KeyCode.S))
+            _playerActions.ThrowObject();
+
         _playerActions.DrinkObject();
 
         if (_playerActions.IsHoldingObject())
             _playerActions.MoveObjectTowardsPlayer();
-        
+
         //FPS
         //debugText.text = "DT = " + Time.deltaTime + "\nFPS = " + 1 / Time.deltaTime;
 
