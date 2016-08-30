@@ -1,0 +1,169 @@
+fileFormatVersion: 2
+guid: c18f80135fe846e4b9f544ab4af7b0b0
+timeCreated: 1472580011
+licenseType: Free
+ModelImporter:
+  serializedVersion: 19
+  fileIDToRecycleName:
+    100000: //RootNode
+    100002: Cocktail_Mixer_2_Cover1
+    100004: Cocktail_Mixer_2_Cover2
+    100006: Cocktail_Mixer_2_Cup2
+    100008: dartboard
+    100010: Fan
+    100012: human_rig1:figure_rig
+    100014: human_rig2:figure_rig
+    100016: human_rig3:figure_rig
+    100018: human_rig4:figure_rig
+    100020: human_rig5:figure_rig
+    100022: human_rig5:Head
+    100024: human_rig5:Head_end
+    100026: human_rig5:l_clav
+    100028: human_rig5:l_elbow
+    100030: human_rig5:l_foot
+    100032: human_rig5:l_hand
+    100034: human_rig5:l_hip
+    100036: human_rig5:l_knee
+    100038: human_rig5:l_shoulder
+    100040: human_rig5:l_toe
+    100042: human_rig5:l_wrist
+    100044: human_rig5:neck
+    100046: human_rig5:pCube23
+    100048: human_rig5:pelvis
+    100050: human_rig5:r_clav
+    100052: human_rig5:r_elbow
+    100054: human_rig5:r_foot
+    100056: human_rig5:r_hand
+    100058: human_rig5:r_hip
+    100060: human_rig5:r_knee
+    100062: human_rig5:r_shoulder
+    100064: human_rig5:r_toe
+    100066: human_rig5:r_wrist
+    100068: human_rig5:spine_1
+    100070: human_rig5:spine_2
+    100072: human_rig:figure_rig
+    100074: pCylinder10
+    100076: pCylinder33
+    100078: polySurface14
+    100080: polySurface26
+    100082: polySurface38
+    100084: polySurface40
+    100086: polySurface42
+    100088: polySurface44
+    100090: polySurface9
+    100092: transform1
+    400000: //RootNode
+    400002: Cocktail_Mixer_2_Cover1
+    400004: Cocktail_Mixer_2_Cover2
+    400006: Cocktail_Mixer_2_Cup2
+    400008: dartboard
+    400010: Fan
+    400012: human_rig1:figure_rig
+    400014: human_rig2:figure_rig
+    400016: human_rig3:figure_rig
+    400018: human_rig4:figure_rig
+    400020: human_rig5:figure_rig
+    400022: human_rig5:Head
+    400024: human_rig5:Head_end
+    400026: human_rig5:l_clav
+    400028: human_rig5:l_elbow
+    400030: human_rig5:l_foot
+    400032: human_rig5:l_hand
+    400034: human_rig5:l_hip
+    400036: human_rig5:l_knee
+    400038: human_rig5:l_shoulder
+    400040: human_rig5:l_toe
+    400042: human_rig5:l_wrist
+    400044: human_rig5:neck
+    400046: human_rig5:pCube23
+    400048: human_rig5:pelvis
+    400050: human_rig5:r_clav
+    400052: human_rig5:r_elbow
+    400054: human_rig5:r_foot
+    400056: human_rig5:r_hand
+    400058: human_rig5:r_hip
+    400060: human_rig5:r_knee
+    400062: human_rig5:r_shoulder
+    400064: human_rig5:r_toe
+    400066: human_rig5:r_wrist
+    400068: human_rig5:spine_1
+    400070: human_rig5:spine_2
+    400072: human_rig:figure_rig
+    400074: pCylinder10
+    400076: pCylinder33
+    400078: polySurface14
+    400080: polySurface26
+    400082: polySurface38
+    400084: polySurface40
+    400086: polySurface42
+    400088: polySurface44
+    400090: polySurface9
+    400092: transform1
+    4300000: human_rig5:pCube23
+    7400000: Take 001
+    9500000: //RootNode
+    13700000: human_rig5:pCube23
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
