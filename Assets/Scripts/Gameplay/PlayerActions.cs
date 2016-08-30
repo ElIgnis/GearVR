@@ -5,8 +5,14 @@ using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public enum Drinks
+public enum DRINK_TYPE
 {
+    /*
+     
+     If you wanna add new drink, please add to the last
+     
+     */
+
     EMPTY,
 
     // Waste
@@ -44,14 +50,19 @@ public enum Drinks
     DORINKS_MAX
 };
 
+enum ARM_MOTION
+{
+    DRINKING,
+    POURING
+}
 public class ChartData
 {
-    public Drinks _src1;
-    public Drinks _src2;
+    public DRINK_TYPE _src1;
+    public DRINK_TYPE _src2;
 
-    public Drinks _compost;
+    public DRINK_TYPE _compost;
 
-    public ChartData(Drinks src1, Drinks src2, Drinks compost)
+    public ChartData(DRINK_TYPE src1, DRINK_TYPE src2, DRINK_TYPE compost)
     {
         _src1 = src1;
         _src2 = src2;
@@ -68,6 +79,7 @@ public class PlayerActions : MonoBehaviour
     InteractableObjects _interactableObject;
     float _grabTimer;
     bool _lookingAtGlassCup;
+    InteractableObjects _currentLookingGlassCup;
     bool _holdingDrink;
     bool _ableToDrink;
 
@@ -76,6 +88,7 @@ public class PlayerActions : MonoBehaviour
     #region [ Public Vars ]
     public Transform handTransform;
     public Transform jointTransform;
+    public GameObject humanModel;
     public GameObject objectPoolParent;
 
     [Range(1, 100)]
@@ -97,14 +110,18 @@ public class PlayerActions : MonoBehaviour
     public InteractableObjects interactableObject { get { return _interactableObject; } }
     public GameObject currentObject { get { return _currentObject; } }
 
+    #region FOR_DEBUG
     public TextMesh debugText;
-    public TextMesh _txtSrc1, _txtSrc2, _txtCompost, _txtCurrentAlcoholContent;
+    public Text _txtSrc1, _txtSrc2, _txtCompost, _txtCurrentAlcoholContent;
+    #endregion
 
-    
     #endregion
 
     #region FOR_MOVE
     public float speed;
+    private Vector3 forward;
+    private Vector3 right;
+    private Vector3 moveDirection;
     #endregion
 
     #region FOR_TOUCH
@@ -113,16 +130,11 @@ public class PlayerActions : MonoBehaviour
 
     #endregion
 
-    #region FOR_DEBUG
 
-    //public TextMesh _txtSrc1, _txtSrc2, _txtCompost, _txtCurrentAlcoholContent;
-
-    #endregion
-
-    private Drinks _src1, _src2, _compost;
+    private DRINK_TYPE _src1, _src2, _compost;
     private int _alcoholContent1, _alcoholContent2;
 
-    private DrinkStatusScript _temp = null;
+    private InteractableObjects _temp = null;
 
     public List<ChartData> _cd = new List<ChartData>();
 
@@ -140,8 +152,6 @@ public class PlayerActions : MonoBehaviour
             //Assign object as current object
             if (Physics.Raycast(ray, out hit, touchableDistance))
             {
-
-                Debug.Log("aaaa");
                 //Check if object is interactable
                 if (hit.collider.gameObject.GetComponent<InteractableObjects>() != null)
                 {
@@ -154,14 +164,13 @@ public class PlayerActions : MonoBehaviour
                     MoveObjectTowardsPlayer();
                     StartCoroutine("CheckLookObject");
                     ///////////////////////////////////////////////
-                    if (_temp = _currentObject.GetComponent<DrinkStatusScript>())
-                        if (_src1 == Drinks.EMPTY)
+                    if (_temp = _currentObject.GetComponent<InteractableObjects>())
+                        if (_src1 == DRINK_TYPE.EMPTY)
                         {
                             _src1 = _temp.GetDrinkType();
                             _alcoholContent1 = _temp.GetAlcoholContent();
                         }
 
-                    DisplaySelectedDrinks();
                     /////////////////////////////////////////////////
                 }
             }
@@ -171,7 +180,7 @@ public class PlayerActions : MonoBehaviour
 
         }
 
-        
+
     }
 
     public void ThrowObject()
@@ -198,6 +207,8 @@ public class PlayerActions : MonoBehaviour
         _currentRB.useGravity = true;
         _currentObject = null;
         _currentRB = null;
+
+        DeselectDrink();
     }
 
     public bool IsHoldingObject()
@@ -211,7 +222,7 @@ public class PlayerActions : MonoBehaviour
     public void DrinkObject()
     {
         //Only can mix drinks
-        if (_interactableObject != null && _interactableObject.objectType == InteractableObjects.OBJECT_TYPE.DRINKS)
+        if (_interactableObject != null && _interactableObject.objectType == OBJECT_TYPE.DRINKS)
         {
 
             //Drink if looking upwards
@@ -220,13 +231,13 @@ public class PlayerActions : MonoBehaviour
                 //Rotate bottle mouth towards player
                 if (_holdingDrink)
                 {
-                    rotateArmToDrink(false);
+                    rotateArmToDrink(ARM_MOTION.DRINKING, false);
                 }
             }
             else
             {
                 //Start drinking and modify alcohol level
-                rotateArmToDrink(true);
+                rotateArmToDrink(ARM_MOTION.DRINKING, true);
             }
         }
     }
@@ -240,69 +251,121 @@ public class PlayerActions : MonoBehaviour
 
     public void DeselectDrink()
     {
-        if (_src2 != Drinks.EMPTY)
-        {
-            _src2 = Drinks.EMPTY;
-            _compost = Drinks.EMPTY;
-        }
-        else if (_src1 != Drinks.EMPTY)
-            _src1 = Drinks.EMPTY;
+        // Ver. If you can select one drink only.
+        if (_src1 != DRINK_TYPE.EMPTY)
+            _src1 = DRINK_TYPE.EMPTY;
+
+        _alcoholContent1 = 0;
+        // Ver. If you can select two drinks.
+        //if (_src2 != DRINK_TYPE.EMPTY)
+        //{
+        //    _src2 = DRINK_TYPE.EMPTY;
+        //    _compost = DRINK_TYPE.EMPTY;
+        //}
+        //else if (_src1 != DRINK_TYPE.EMPTY)
+        //    _src1 = DRINK_TYPE.EMPTY;
     }
 
-    public Drinks MixDrinks(Drinks src1, Drinks src2)
+    public void PourCurrentDrink()
     {
+        // Animetion
 
-        if (src1 == src2)
-            return src1;
+        InteractableObjects currentObject = _currentObject.gameObject.GetComponent<InteractableObjects>();
 
-        if (src1 == Drinks.WASTE || src2 == Drinks.WASTE)
-            return Drinks.WASTE;
+        // Current I have thing.
+        DRINK_TYPE src1 = currentObject.GetDrinkType();
+        // Current I look thing.
+        DRINK_TYPE src2 = _currentLookingGlassCup.GetDrinkType();
 
-        Debug.Log("Before searching.");
-
-        foreach (ChartData data in _cd)
+        switch (_currentLookingGlassCup.GetGlassState())
         {
-            Debug.Log("Start searching.");
-            if (data._src1 == src1)
-            {
-                if (data._src2 == src2)
-                {
-                    return data._compost;
-                }
-            }
+            case GLASS_STATE.EMPTY:
+                // If I look cup is empty, I just pour.
+                _currentLookingGlassCup.SetDrinkType(src1);
 
-            if (data._src1 == src2)
-            {
-                if (data._src2 == src1)
-                {
-                    return data._compost;
-                }
-            }
+                _currentLookingGlassCup.SetGlassState(GLASS_STATE.HALF);
 
-            Debug.Log("Go to next data");
+                Debug.Log("Glass is " + currentObject.GetDrinkType());
+                Debug.Log("Glass is " + currentObject.GetGlassState());
+                Debug.Log("POURING");
+                break;
+
+            case GLASS_STATE.HALF:
+                // I pour the same thing
+                if (src1 == src2)
+                    _currentLookingGlassCup.SetDrinkType(src1);
+
+                // I pour the waste. or  I pour any thing to the waste.
+                if (src1 == DRINK_TYPE.WASTE || src2 == DRINK_TYPE.WASTE)
+                    _currentLookingGlassCup.SetDrinkType(DRINK_TYPE.WASTE);
+
+                // I investigate combination when I pour any drink to other drink.
+                foreach (ChartData data in _cd)
+                {
+                    if (data._src1 == src1)
+                    {
+                        if (data._src2 == src2)
+                        {
+                            _currentLookingGlassCup.SetDrinkType(data._compost);
+                        }
+                    }
+
+                    if (data._src1 == src2)
+                    {
+                        if (data._src2 == src1)
+                        {
+                            _currentLookingGlassCup.SetDrinkType(data._compost);
+                        }
+                    }
+
+                }
+
+                _currentLookingGlassCup.SetGlassState(GLASS_STATE.FULL);
+                Debug.Log("Glass is " + _currentLookingGlassCup.GetDrinkType());
+                Debug.Log("Glass is " + _currentLookingGlassCup.GetGlassState());
+                Debug.Log("POURING");
+                break;
+
+            case GLASS_STATE.FULL:
+                // Do nothing
+                break;
+
+            default:
+                // This combination wasn't in chart data.
+                _currentLookingGlassCup.SetDrinkType(DRINK_TYPE.WASTE);
+                break;
         }
 
-        return Drinks.WASTE;
     }
 
     #endregion
 
     #region [ Private Methods ]
-    
+
 
     IEnumerator CheckLookObject()
     {
         while (_currentObject != null)
         {
+
             RaycastHit hit;
             Ray ray = new Ray(transform.position, transform.forward);
 
             //Assign object as current object
             if (Physics.Raycast(ray, out hit, 1000))
             {
-                if (hit.collider.gameObject.name == "Glass Cup")
+
+                if (hit.collider.gameObject.tag == "GlassCup")
                 {
+                    Debug.Log("glass of" + hit.collider.gameObject.GetComponent<InteractableObjects>().GetDrinkType());
                     _lookingAtGlassCup = true;
+                    _currentLookingGlassCup =  hit.collider.gameObject.GetComponent<InteractableObjects>();
+
+                    if(IsHoldingObject())
+                    {
+                        _src2 = _currentLookingGlassCup.GetDrinkType();
+                        Debug.Log("I looking at glass cup when I holding drink");
+                    }
                 }
                 else
                 {
@@ -311,29 +374,43 @@ public class PlayerActions : MonoBehaviour
             }
             else
             {
-                debugText.text = "Not looking at glass cup";
+                //                debugText.text = "Not looking at glass cup";
                 _lookingAtGlassCup = false;
             }
             //Check at preferred frame interval
             yield return new WaitForSeconds(frameInterval * Time.deltaTime);
         }
-        
+
     }
 
-    void rotateArmToDrink(bool reverse)
+    void rotateArmToDrink(ARM_MOTION type, bool reverse)
     {
-        if (reverse)
+        switch (type)
         {
-            Debug.Log("reverse");
-            jointTransform.rotation = Quaternion.RotateTowards(jointTransform.rotation, Camera.main.transform.rotation, handRotateSpeed * Time.deltaTime);
-            _ableToDrink = false;
-        }
-
-        else
-        {
-            Debug.Log("changing");
-            jointTransform.rotation = Quaternion.RotateTowards(jointTransform.rotation, Quaternion.AngleAxis(-135, Camera.main.transform.right), handRotateSpeed * Time.deltaTime);
-            _ableToDrink = true;
+            case ARM_MOTION.DRINKING:
+                if (reverse)
+                {
+                    jointTransform.rotation = Quaternion.RotateTowards(jointTransform.rotation, Camera.main.transform.rotation, handRotateSpeed * Time.deltaTime);
+                     _ableToDrink = false;
+                }
+                else
+                {
+                    jointTransform.rotation = Quaternion.RotateTowards(jointTransform.rotation, Quaternion.AngleAxis(-135, Camera.main.transform.right), handRotateSpeed * Time.deltaTime);
+                    _ableToDrink = true;
+                }
+                break;
+            case ARM_MOTION.POURING:
+                if (reverse)
+                {
+                    jointTransform.rotation = Quaternion.RotateTowards(jointTransform.rotation, Camera.main.transform.rotation, handRotateSpeed * Time.deltaTime);
+                     _ableToDrink = false;
+                }
+                else
+                {
+                    jointTransform.rotation = Quaternion.RotateTowards(jointTransform.rotation, Quaternion.AngleAxis(-135, Camera.main.transform.right), handRotateSpeed * Time.deltaTime);
+                    _ableToDrink = true;
+                }
+                break;
         }
     }
 
@@ -343,44 +420,42 @@ public class PlayerActions : MonoBehaviour
     {
         #region INIT_CHART_DATA
 
-        _cd.Add(new ChartData(Drinks.BLUE, Drinks.BEER, Drinks.BEER));
-        _cd.Add(new ChartData(Drinks.BLUE, Drinks.BEER, Drinks.BEER));
-        _cd.Add(new ChartData(Drinks.BLUE, Drinks.VODKA, Drinks.GRAVITY));
-        _cd.Add(new ChartData(Drinks.BLUE, Drinks.WHISKY, Drinks.WHISKY));
-        _cd.Add(new ChartData(Drinks.BLUE, Drinks.SOJU, Drinks.WATER));
-        _cd.Add(new ChartData(Drinks.BLUE, Drinks.SAKE, Drinks.BUBBLE));
-        _cd.Add(new ChartData(Drinks.BLUE, Drinks.RUM, Drinks.RUM));
-        _cd.Add(new ChartData(Drinks.BLUE, Drinks.TEQUILA, Drinks.TEQUILA));
-        _cd.Add(new ChartData(Drinks.BLUE, Drinks.MOSCATO, Drinks.LIFE));
+        _cd.Add(new ChartData(DRINK_TYPE.BLUE, DRINK_TYPE.BEER, DRINK_TYPE.BEER));
+        _cd.Add(new ChartData(DRINK_TYPE.BLUE, DRINK_TYPE.BEER, DRINK_TYPE.BEER));
+        _cd.Add(new ChartData(DRINK_TYPE.BLUE, DRINK_TYPE.VODKA, DRINK_TYPE.GRAVITY));
+        _cd.Add(new ChartData(DRINK_TYPE.BLUE, DRINK_TYPE.WHISKY, DRINK_TYPE.WHISKY));
+        _cd.Add(new ChartData(DRINK_TYPE.BLUE, DRINK_TYPE.SOJU, DRINK_TYPE.WATER));
+        _cd.Add(new ChartData(DRINK_TYPE.BLUE, DRINK_TYPE.SAKE, DRINK_TYPE.BUBBLE));
+        _cd.Add(new ChartData(DRINK_TYPE.BLUE, DRINK_TYPE.RUM, DRINK_TYPE.RUM));
+        _cd.Add(new ChartData(DRINK_TYPE.BLUE, DRINK_TYPE.TEQUILA, DRINK_TYPE.TEQUILA));
+        _cd.Add(new ChartData(DRINK_TYPE.BLUE, DRINK_TYPE.MOSCATO, DRINK_TYPE.LIFE));
 
-        _cd.Add(new ChartData(Drinks.GREEN, Drinks.BEER, Drinks.BEER));
-        _cd.Add(new ChartData(Drinks.GREEN, Drinks.VODKA, Drinks.VODKA));
-        _cd.Add(new ChartData(Drinks.GREEN, Drinks.WHISKY, Drinks.STRENGTH));
-        _cd.Add(new ChartData(Drinks.GREEN, Drinks.SOJU, Drinks.GRASS));
-        _cd.Add(new ChartData(Drinks.GREEN, Drinks.SAKE, Drinks.SAKE));
-        _cd.Add(new ChartData(Drinks.GREEN, Drinks.RUM, Drinks.RUM));
-        _cd.Add(new ChartData(Drinks.GREEN, Drinks.TEQUILA, Drinks.FIRE));
-        _cd.Add(new ChartData(Drinks.GREEN, Drinks.MOSCATO, Drinks.MOSCATO));
+        _cd.Add(new ChartData(DRINK_TYPE.GREEN, DRINK_TYPE.BEER, DRINK_TYPE.BEER));
+        _cd.Add(new ChartData(DRINK_TYPE.GREEN, DRINK_TYPE.VODKA, DRINK_TYPE.VODKA));
+        _cd.Add(new ChartData(DRINK_TYPE.GREEN, DRINK_TYPE.WHISKY, DRINK_TYPE.STRENGTH));
+        _cd.Add(new ChartData(DRINK_TYPE.GREEN, DRINK_TYPE.SOJU, DRINK_TYPE.GRASS));
+        _cd.Add(new ChartData(DRINK_TYPE.GREEN, DRINK_TYPE.SAKE, DRINK_TYPE.SAKE));
+        _cd.Add(new ChartData(DRINK_TYPE.GREEN, DRINK_TYPE.RUM, DRINK_TYPE.RUM));
+        _cd.Add(new ChartData(DRINK_TYPE.GREEN, DRINK_TYPE.TEQUILA, DRINK_TYPE.FIRE));
+        _cd.Add(new ChartData(DRINK_TYPE.GREEN, DRINK_TYPE.MOSCATO, DRINK_TYPE.MOSCATO));
 
-        _cd.Add(new ChartData(Drinks.YELLOW, Drinks.BEER, Drinks.GLITTER));
-        _cd.Add(new ChartData(Drinks.YELLOW, Drinks.VODKA, Drinks.VODKA));
-        _cd.Add(new ChartData(Drinks.YELLOW, Drinks.WHISKY, Drinks.GLOWING));
-        _cd.Add(new ChartData(Drinks.YELLOW, Drinks.SOJU, Drinks.SOJU));
-        _cd.Add(new ChartData(Drinks.YELLOW, Drinks.SAKE, Drinks.SQUARE));
-        _cd.Add(new ChartData(Drinks.YELLOW, Drinks.RUM, Drinks.RUM));
-        _cd.Add(new ChartData(Drinks.YELLOW, Drinks.TEQUILA, Drinks.TEQUILA));
-        _cd.Add(new ChartData(Drinks.YELLOW, Drinks.MOSCATO, Drinks.RAINBOW));
+        _cd.Add(new ChartData(DRINK_TYPE.YELLOW, DRINK_TYPE.BEER, DRINK_TYPE.GLITTER));
+        _cd.Add(new ChartData(DRINK_TYPE.YELLOW, DRINK_TYPE.VODKA, DRINK_TYPE.VODKA));
+        _cd.Add(new ChartData(DRINK_TYPE.YELLOW, DRINK_TYPE.WHISKY, DRINK_TYPE.GLOWING));
+        _cd.Add(new ChartData(DRINK_TYPE.YELLOW, DRINK_TYPE.SOJU, DRINK_TYPE.SOJU));
+        _cd.Add(new ChartData(DRINK_TYPE.YELLOW, DRINK_TYPE.SAKE, DRINK_TYPE.SQUARE));
+        _cd.Add(new ChartData(DRINK_TYPE.YELLOW, DRINK_TYPE.RUM, DRINK_TYPE.RUM));
+        _cd.Add(new ChartData(DRINK_TYPE.YELLOW, DRINK_TYPE.TEQUILA, DRINK_TYPE.TEQUILA));
+        _cd.Add(new ChartData(DRINK_TYPE.YELLOW, DRINK_TYPE.MOSCATO, DRINK_TYPE.RAINBOW));
 
         #endregion
 
         speed = 5.0f;
 
-        _src1 = _src2 = _compost = Drinks.EMPTY;
+        _src1 = _src2 = _compost = DRINK_TYPE.EMPTY;
 
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Confined;
-
-        //     DisplaySelectedDrinks();
 
         throwAngle = 90 - throwAngle;
     }
@@ -388,15 +463,28 @@ public class PlayerActions : MonoBehaviour
     void Update()
     {
         #region MOVE_METHOD
-        transform.Translate(speed * Input.GetAxis("Horizontal") * Time.deltaTime, 0f, speed * Input.GetAxis("Vertical") * Time.deltaTime);
+        //For stop
+        humanModel.transform.rotation = Quaternion.Euler(0, Camera.main.gameObject.transform.localEulerAngles.y, 0);
 
-        if (Input.GetKey(KeyCode.Escape))
-        {
-            SceneManager.LoadScene("RyoheiTest");
-        }
+        // For walk
+        //forward = Camera.main.transform.TransformDirection(Vector3.forward);
+        //right = Camera.main.transform.TransformDirection(Vector3.right);
+        //moveDirection = Input.GetAxis("Horizontal") * right + Input.GetAxis("Vertical") * forward;
+        //moveDirection *= speed;
+
+        //transform.Translate(moveDirection);
+
+        // For fly
+        //transform.Translate(speed * Input.GetAxis("Horizontal") * Time.deltaTime, 0f, speed * Input.GetAxis("Vertical") * Time.deltaTime);
+
+        //if (Input.GetKey(KeyCode.Escape))
+        //{
+        //    SceneManager.LoadScene("RyoheiTest");
+        //}
         #endregion
 
-        //#region TOUCH_METHOD
+        //Not use
+        #region TOUCH_METHOD
 
         //if (Input.GetMouseButtonDown(0))
         //{
@@ -411,32 +499,19 @@ public class PlayerActions : MonoBehaviour
         //        #region GET_OBJ_ALCOHOL_TYPE_METHOD
 
         //        if (_temp = obj.GetComponent<DrinkStatusScript>())
-        //            if (_src1 == Drinks.EMPTY){
+        //            if (_src1 == DRINK_TYPE.EMPTY){
         //                _src1 = _temp.GetDrinkType();
         //                _alcoholContent1 = _temp.GetAlcoholContent();}
-        //            else if (_src2 == Drinks.EMPTY) { 
+        //            else if (_src2 == DRINK_TYPE.EMPTY) { 
         //                _src2 = _temp.GetDrinkType();
         //                _alcoholContent2 = _temp.GetAlcoholContent();}
 
         //        #endregion
         //}}
 
-        //#endregion
+        #endregion 
 
-        #region CHECK_COMBINATION
-
-        if (_src2 != Drinks.EMPTY)
-            if (_src1 != Drinks.EMPTY)
-            {
-                Debug.Log("Let's mix");
-                // If you forget this if statement, this game to become heavy
-                if (_compost == Drinks.EMPTY)
-                    _compost = MixDrinks(_src1, _src2);
-            }
-
-        #endregion
-
-        //      DisplaySelectedDrinks();
+        DisplaySelectedDrinks();
 
     }
 
@@ -446,17 +521,17 @@ public class PlayerActions : MonoBehaviour
     public void DisplaySelectedDrinks()
     {
         int sum = _alcoholContent1 + _alcoholContent2;
-        _txtSrc1.text = "Src1 = " + DrinkExt.DisplayName(_src1);
-        _txtSrc2.text = "Src2 = " + DrinkExt.DisplayName(_src2);
-        _txtCompost.text = "Compost = " + DrinkExt.DisplayName(_compost);
-        _txtCurrentAlcoholContent.text = "CAC = " + sum.ToString();
+        _txtSrc1.text = "SRC1 = " + DrinkExt.DisplayName(_src1);
+        _txtSrc2.text = "SRC2 = " + DrinkExt.DisplayName(_src2);
+        _txtCompost.text = "COMP = " + DrinkExt.DisplayName(_compost);
+        _txtCurrentAlcoholContent.text = "CUAC = " + sum.ToString();
     }
     #endregion
 }
 
 static class DrinkExt
 {
-    public static string DisplayName(this Drinks drink)
+    public static string DisplayName(this DRINK_TYPE drink)
     {
 
         #region INIT_ALCOHOL_NAMES

@@ -113,7 +113,7 @@ public class OVRGridCube : MonoBehaviour
 			for (int y = -gridSizeY; y <= gridSizeY; y++)
 				for (int z = -gridSizeZ; z <= gridSizeZ; z++)
 			{
-				// Set the cube type:
+				// Set the cube drinkType:
 				// 0 = non-axis cube
 				// 1 = axis cube
 				// 2 = center cube

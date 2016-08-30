@@ -1,14 +1,26 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class InteractableObjects : MonoBehaviour {
-
 	public enum OBJECT_TYPE{
 		DRINKS,
 		OTHERS
 	}
 
-    public Drinks _type;
+    public enum GLASS_STATE
+    {
+        EMPTY,
+        HALF,
+        FULL
+    }
+
+public class InteractableObjects : MonoBehaviour {
+
+
+
+	public OBJECT_TYPE objectType;
+    public DRINK_TYPE drinkType;
+
+    public GLASS_STATE currentState;
 
     private int[] AlcoholContent = { 
                              6,  // Beer
@@ -21,7 +33,6 @@ public class InteractableObjects : MonoBehaviour {
                              5   // Moscato 
                            };
 
-	public OBJECT_TYPE objectType;
 
 	// Use this for initialization
 	void Start () {
@@ -33,14 +44,37 @@ public class InteractableObjects : MonoBehaviour {
 	
 	}
 
-    public Drinks GetDrinkType()
+    public GLASS_STATE GetGlassState()
     {
-        return _type;
+        return currentState;
+    }
+    public void SetGlassState(GLASS_STATE nextState)
+    {
+        Debug.Log("SET");
+        currentState = nextState;
+    }
+
+    public DRINK_TYPE GetDrinkType()
+    {
+        if (objectType == OBJECT_TYPE.DRINKS)
+            return drinkType;
+        else
+            return DRINK_TYPE.EMPTY;
+    }
+
+    public void SetDrinkType(DRINK_TYPE pouringThing)
+    {
+        drinkType = pouringThing;
+    }
+
+    public OBJECT_TYPE GetObjectType()
+    {
+        return objectType;
     }
 
     public string GetAlcoholTypeToString()
     {
-        return DrinkExt.DisplayName(_type);
+        return DrinkExt.DisplayName(drinkType);
     }
 
     public int GetAlcoholContent()
@@ -48,8 +82,8 @@ public class InteractableObjects : MonoBehaviour {
         // The 5 is first number of Alcohol in enum statement.
 
         // If it is any alcohols
-        if ((int)_type >= 5 || (int)_type <= 12)
-            return AlcoholContent[(int)_type - 5];
+        if ((int)drinkType >= 5 || (int)drinkType <= 12)
+            return AlcoholContent[(int)drinkType - 5];
 
         // Non-alcohol
         return 0;

@@ -957,7 +957,7 @@ public static class OVRInput
 	}
 
 	/// <summary>
-	/// Returns the current active controller type.
+	/// Returns the current active controller drinkType.
 	/// </summary>
 	public static Controller GetActiveController()
 	{

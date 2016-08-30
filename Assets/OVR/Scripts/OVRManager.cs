@@ -460,7 +460,7 @@ public class OVRManager : MonoBehaviour
 	[SerializeField]
 	private OVRManager.TrackingOrigin _trackingOriginType = OVRManager.TrackingOrigin.EyeLevel;
 	/// <summary>
-	/// Defines the current tracking origin type.
+	/// Defines the current tracking origin drinkType.
 	/// </summary>
 	public OVRManager.TrackingOrigin trackingOriginType
 	{
