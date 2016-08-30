@@ -91,6 +91,11 @@ public class PlayerActions : MonoBehaviour
     public GameObject humanModel;
     public GameObject objectPoolParent;
 
+    public AudioClip pourSound;
+    public AudioClip bottleDropSound;
+    public AudioClip bubbleSound;
+    public AudioClip throwSound;
+
     [Range(1, 100)]
     public int frameInterval;
 
@@ -191,6 +196,9 @@ public class PlayerActions : MonoBehaviour
             return;
         else
         {
+            //Sound 
+            AudioSource.PlayClipAtPoint(throwSound, transform.position);
+
             //Apply force and throw object in an arc
             Vector3 throwDirection = Quaternion.AngleAxis(throwAngle, gameObject.transform.right) * gameObject.transform.up;
             _currentRB.AddForce(throwDirection * throwForce);
@@ -270,73 +278,84 @@ public class PlayerActions : MonoBehaviour
     public void PourCurrentDrink()
     {
         // Animetion
-
         InteractableObjects currentObject = _currentObject.gameObject.GetComponent<InteractableObjects>();
 
-        // Current I have thing.
-        DRINK_TYPE src1 = currentObject.GetDrinkType();
-        // Current I look thing.
-        DRINK_TYPE src2 = _currentLookingGlassCup.GetDrinkType();
-
-        switch (_currentLookingGlassCup.GetGlassState())
+        //Only can pour drinks
+        if(currentObject.GetObjectType() == OBJECT_TYPE.DRINKS)
         {
-            case GLASS_STATE.EMPTY:
-                // If I look cup is empty, I just pour.
-                _currentLookingGlassCup.SetDrinkType(src1);
+            
+            // Current I have thing.
+            DRINK_TYPE src1 = currentObject.GetDrinkType();
+            // Current I look thing.
+            DRINK_TYPE src2 = _currentLookingGlassCup.GetDrinkType();
 
-                _currentLookingGlassCup.SetGlassState(GLASS_STATE.HALF);
+            switch (_currentLookingGlassCup.GetGlassState())
+            {
+                case GLASS_STATE.EMPTY:
 
-                Debug.Log("Glass is " + currentObject.GetDrinkType());
-                Debug.Log("Glass is " + currentObject.GetGlassState());
-                Debug.Log("POURING");
-                break;
+                    //Sound 
+                    AudioSource.PlayClipAtPoint(pourSound, transform.position);
 
-            case GLASS_STATE.HALF:
-                // I pour the same thing
-                if (src1 == src2)
+                    // If I look cup is empty, I just pour.
                     _currentLookingGlassCup.SetDrinkType(src1);
 
-                // I pour the waste. or  I pour any thing to the waste.
-                if (src1 == DRINK_TYPE.WASTE || src2 == DRINK_TYPE.WASTE)
+                    _currentLookingGlassCup.SetGlassState(GLASS_STATE.HALF);
+
+                    Debug.Log("Glass is " + currentObject.GetDrinkType());
+                    Debug.Log("Glass is " + currentObject.GetGlassState());
+                    Debug.Log("POURING");
+                    break;
+
+                case GLASS_STATE.HALF:
+
+                    //Sound 
+                    AudioSource.PlayClipAtPoint(pourSound, transform.position);
+
+                    // I pour the same thing
+                    if (src1 == src2)
+                        _currentLookingGlassCup.SetDrinkType(src1);
+
+                    // I pour the waste. or  I pour any thing to the waste.
+                    if (src1 == DRINK_TYPE.WASTE || src2 == DRINK_TYPE.WASTE)
+                        _currentLookingGlassCup.SetDrinkType(DRINK_TYPE.WASTE);
+
+                    // I investigate combination when I pour any drink to other drink.
+                    foreach (ChartData data in _cd)
+                    {
+                        if (data._src1 == src1)
+                        {
+                            if (data._src2 == src2)
+                            {
+                                _currentLookingGlassCup.SetDrinkType(data._compost);
+                            }
+                        }
+
+                        if (data._src1 == src2)
+                        {
+                            if (data._src2 == src1)
+                            {
+                                _currentLookingGlassCup.SetDrinkType(data._compost);
+                            }
+                        }
+
+                    }
+
+                    _currentLookingGlassCup.SetGlassState(GLASS_STATE.FULL);
+                    Debug.Log("Glass is " + _currentLookingGlassCup.GetDrinkType());
+                    Debug.Log("Glass is " + _currentLookingGlassCup.GetGlassState());
+                    Debug.Log("POURING");
+                    break;
+
+                case GLASS_STATE.FULL:
+                    // Do nothing
+                    break;
+
+                default:
+                    // This combination wasn't in chart data.
                     _currentLookingGlassCup.SetDrinkType(DRINK_TYPE.WASTE);
-
-                // I investigate combination when I pour any drink to other drink.
-                foreach (ChartData data in _cd)
-                {
-                    if (data._src1 == src1)
-                    {
-                        if (data._src2 == src2)
-                        {
-                            _currentLookingGlassCup.SetDrinkType(data._compost);
-                        }
-                    }
-
-                    if (data._src1 == src2)
-                    {
-                        if (data._src2 == src1)
-                        {
-                            _currentLookingGlassCup.SetDrinkType(data._compost);
-                        }
-                    }
-
-                }
-
-                _currentLookingGlassCup.SetGlassState(GLASS_STATE.FULL);
-                Debug.Log("Glass is " + _currentLookingGlassCup.GetDrinkType());
-                Debug.Log("Glass is " + _currentLookingGlassCup.GetGlassState());
-                Debug.Log("POURING");
-                break;
-
-            case GLASS_STATE.FULL:
-                // Do nothing
-                break;
-
-            default:
-                // This combination wasn't in chart data.
-                _currentLookingGlassCup.SetDrinkType(DRINK_TYPE.WASTE);
-                break;
+                    break;
+            }
         }
-
     }
 
     #endregion

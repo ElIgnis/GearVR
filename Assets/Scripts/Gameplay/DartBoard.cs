@@ -11,13 +11,14 @@ public class DartBoard : MonoBehaviour
     #region [ Public Vars ]
     public int[] scoreAmount;
     public TextMesh displayScore;
+    public AudioClip dartHitSound;
     #endregion
 
     void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.tag == "Dart")
         {
-            
+            AudioSource.PlayClipAtPoint(dartHitSound, other.transform.position);
             Rigidbody rb = other.GetComponent<Rigidbody>();
             rb.constraints = RigidbodyConstraints.FreezeAll;
 
