@@ -20,6 +20,7 @@ public class InteractableObjects : MonoBehaviour {
     public DRINK_TYPE drinkType;
 
     public GLASS_STATE currentState;
+    public int currentAlcoholContent;
 
     private int[] AlcoholContent = { 
                              6,  // Beer
@@ -35,7 +36,8 @@ public class InteractableObjects : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-	
+        if (this.GetObjectType() == OBJECT_TYPE.DRINKS)
+            currentAlcoholContent = AlcoholContent[(int)drinkType - 5];
 	}
 	
 	// Update is called once per frame
@@ -49,7 +51,6 @@ public class InteractableObjects : MonoBehaviour {
     }
     public void SetGlassState(GLASS_STATE nextState)
     {
-        Debug.Log("SET");
         currentState = nextState;
     }
 
@@ -82,9 +83,15 @@ public class InteractableObjects : MonoBehaviour {
 
         // If it is any alcohols
         if ((int)drinkType >= 5 || (int)drinkType <= 12)
+        {
+            Debug.Log(AlcoholContent[(int)drinkType - 5]);
             return AlcoholContent[(int)drinkType - 5];
-
+        }
         // Non-alcohol
         return 0;
+    }
+    public void AddAlcoholContent(DRINK_TYPE drink)
+    {
+        currentAlcoholContent += AlcoholContent[(int)drink - 5];
     }
 }

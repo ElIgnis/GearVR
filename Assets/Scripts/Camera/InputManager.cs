@@ -4,58 +4,65 @@ using System.Collections;
 
 public class InputManager : MonoBehaviour
 {
-    
-	public TextMesh debugText;
-	PlayerActions _playerActions;
+
+    public TextMesh debugText;
+    PlayerActions _playerActions;
 
     private RaycastHit _hit;
     private Ray _ray;
     public GameObject _targetObject;
     public GameObject _reticle;
 
-	// Use this for initialization
-	void Start ()
-	{
-		OVRTouchpad.Create ();
-		OVRTouchpad.TouchHandler += UpdateInput;
-        _playerActions = GetComponent<PlayerActions> ();
+    AudioSource fxSound;
+    public AudioClip backMusic;
+
+    // Use this for initialization
+    void Start()
+    {
+        OVRTouchpad.Create();
+        OVRTouchpad.TouchHandler += UpdateInput;
+        _playerActions = GetComponent<PlayerActions>();
 
         Cursor.visible = false;
 
         Debug.Log("InputManagerStarted");
 
-	}
+        fxSound = GetComponent<AudioSource>();
+        fxSound.Play();
 
-	void UpdateInput (object sender, System.EventArgs arg)
-	{
-		OVRTouchpad.TouchArgs touchArg = (OVRTouchpad.TouchArgs)arg;
+    }
 
-		switch (touchArg.TouchType) {
-		case OVRTouchpad.TouchEvent.SingleTap:
-			UpdateInteraction ();
-			break;
-		case OVRTouchpad.TouchEvent.Up:
-			break;
-		case OVRTouchpad.TouchEvent.Down:
-			break;
-		case OVRTouchpad.TouchEvent.Left:
-			_playerActions.ThrowObject ();
-			break;
-		case OVRTouchpad.TouchEvent.Right:
-			break;
-		}
-	}
+    void UpdateInput(object sender, System.EventArgs arg)
+    {
+        OVRTouchpad.TouchArgs touchArg = (OVRTouchpad.TouchArgs)arg;
 
-	void UpdateInteraction ()
-	{
-    //  debugText.text = _playerActions.lookingAtGlassCup + "";
+        switch (touchArg.TouchType)
+        {
+            case OVRTouchpad.TouchEvent.SingleTap:
+                UpdateInteraction();
+                break;
+            case OVRTouchpad.TouchEvent.Up:
+                break;
+            case OVRTouchpad.TouchEvent.Down:
+                break;
+            case OVRTouchpad.TouchEvent.Left:
+                _playerActions.ThrowObject();
+                break;
+            case OVRTouchpad.TouchEvent.Right:
+                break;
+        }
+    }
+
+    void UpdateInteraction()
+    {
+        //  debugText.text = _playerActions.lookingAtGlassCup + "";
         if (_playerActions.IsHoldingObject())
         {
 
             //Release the object if not looking at glass cup
-            if (!_playerActions.lookingAtGlassCup)            {
+            if (!_playerActions.lookingAtGlassCup)
+            {
 
-                Debug.Log("RELEASING");
                 _playerActions.ReleaseObject();
             }
             else
@@ -68,7 +75,7 @@ public class InputManager : MonoBehaviour
             _playerActions.GrabObject();
         }
 
-	}
+    }
 
     float dis;
 
@@ -105,7 +112,7 @@ public class InputManager : MonoBehaviour
             {
 
             }
-                _targetObject = _hit.collider.gameObject;
+            _targetObject = _hit.collider.gameObject;
 
             Vector3 Apos = GameObject.Find("Main Camera").transform.position;
             Vector3 Bpos = _targetObject.transform.position;
@@ -114,7 +121,7 @@ public class InputManager : MonoBehaviour
             touchableDistance += dis;
 
         }
-         //   _reticle.transform.localScale = new Vector3(touchableDistance / 100, touchableDistance / 100, 1);
+        //   _reticle.transform.localScale = new Vector3(touchableDistance / 100, touchableDistance / 100, 1);
     }
 }
 

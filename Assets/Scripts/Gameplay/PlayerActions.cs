@@ -117,7 +117,7 @@ public class PlayerActions : MonoBehaviour
 
     #region FOR_DEBUG
     public TextMesh debugText;
-    public Text _txtSrc1, _txtSrc2, _txtCompost, _txtCurrentAlcoholContent;
+    public Text _txtSrc1, _txtSrc2, _txtCompost, _txtCurrentAlcoholContent, _txtAlcoholContentOfLookingThing;
     #endregion
 
     #endregion
@@ -168,7 +168,6 @@ public class PlayerActions : MonoBehaviour
                     _interactableObject = _currentObject.GetComponent<InteractableObjects>();
                     MoveObjectTowardsPlayer();
                     StartCoroutine("CheckLookObject");
-
                     ///////////////////////////////////////////////
                     if (_temp = _currentObject.GetComponent<InteractableObjects>())
                         if (_src1 != DRINK_TYPE.EMPTY)
@@ -233,6 +232,7 @@ public class PlayerActions : MonoBehaviour
         //Only can mix drinks
         if (_interactableObject != null && _interactableObject.objectType == OBJECT_TYPE.DRINKS)
         {
+
             //Drink if looking upwards
             if (gameObject.transform.forward.y >= headTiltLevel)
             {
@@ -278,12 +278,14 @@ public class PlayerActions : MonoBehaviour
     public void PourCurrentDrink()
     {
         // Animetion
+        rotateArmToDrink(ARM_MOTION.DRINKING, true);
+
         InteractableObjects currentObject = _currentObject.gameObject.GetComponent<InteractableObjects>();
 
         //Only can pour drinks
-        if(currentObject.GetObjectType() == OBJECT_TYPE.DRINKS)
+        if (currentObject.GetObjectType() == OBJECT_TYPE.DRINKS)
         {
-            
+
             // Current I have thing.
             DRINK_TYPE src1 = currentObject.GetDrinkType();
             // Current I look thing.
@@ -299,10 +301,13 @@ public class PlayerActions : MonoBehaviour
                     // If I look cup is empty, I just pour.
                     _currentLookingGlassCup.SetDrinkType(src1);
 
+                    _currentLookingGlassCup.AddAlcoholContent(src1);
+
                     _currentLookingGlassCup.SetGlassState(GLASS_STATE.HALF);
 
                     Debug.Log("Glass is " + currentObject.GetDrinkType());
                     Debug.Log("Glass is " + currentObject.GetGlassState());
+                    Debug.Log("This AC is " + currentObject.GetAlcoholContent());
                     Debug.Log("POURING");
                     break;
 
@@ -313,11 +318,19 @@ public class PlayerActions : MonoBehaviour
 
                     // I pour the same thing
                     if (src1 == src2)
+                    {
                         _currentLookingGlassCup.SetDrinkType(src1);
+                        _currentLookingGlassCup.AddAlcoholContent(src1);
+                    }
+
 
                     // I pour the waste. or  I pour any thing to the waste.
                     if (src1 == DRINK_TYPE.WASTE || src2 == DRINK_TYPE.WASTE)
+                    {
                         _currentLookingGlassCup.SetDrinkType(DRINK_TYPE.WASTE);
+                        _currentLookingGlassCup.AddAlcoholContent(src1);
+                    }
+
 
                     // I investigate combination when I pour any drink to other drink.
                     foreach (ChartData data in _cd)
@@ -327,6 +340,7 @@ public class PlayerActions : MonoBehaviour
                             if (data._src2 == src2)
                             {
                                 _currentLookingGlassCup.SetDrinkType(data._compost);
+                                _currentLookingGlassCup.AddAlcoholContent(src1);
                             }
                         }
 
@@ -335,6 +349,7 @@ public class PlayerActions : MonoBehaviour
                             if (data._src2 == src1)
                             {
                                 _currentLookingGlassCup.SetDrinkType(data._compost);
+                                _currentLookingGlassCup.AddAlcoholContent(src1);
                             }
                         }
 
@@ -343,6 +358,8 @@ public class PlayerActions : MonoBehaviour
                     _currentLookingGlassCup.SetGlassState(GLASS_STATE.FULL);
                     Debug.Log("Glass is " + _currentLookingGlassCup.GetDrinkType());
                     Debug.Log("Glass is " + _currentLookingGlassCup.GetGlassState());
+                    Debug.Log("This AC is " + currentObject.GetAlcoholContent());
+
                     Debug.Log("POURING");
                     break;
 
@@ -379,12 +396,11 @@ public class PlayerActions : MonoBehaviour
                 {
                     Debug.Log("glass of" + hit.collider.gameObject.GetComponent<InteractableObjects>().GetDrinkType());
                     _lookingAtGlassCup = true;
-                    _currentLookingGlassCup =  hit.collider.gameObject.GetComponent<InteractableObjects>();
+                    _currentLookingGlassCup = hit.collider.gameObject.GetComponent<InteractableObjects>();
 
-                    if(IsHoldingObject())
+                    if (IsHoldingObject())
                     {
                         _src2 = _currentLookingGlassCup.GetDrinkType();
-                        Debug.Log("I looking at glass cup when I holding drink");
                     }
                 }
                 else
@@ -418,18 +434,22 @@ public class PlayerActions : MonoBehaviour
                     jointTransform.localEulerAngles = Vector3.MoveTowards(jointTransform.localEulerAngles, new Vector3(-135, 0, 0), handRotateSpeed * Time.deltaTime);
                     _ableToDrink = true;
                 }
+                Debug.Log("DrinkMotion");
                 break;
+
             case ARM_MOTION.POURING:
                 if (reverse)
                 {
                     jointTransform.rotation = Quaternion.RotateTowards(jointTransform.rotation, Camera.main.transform.rotation, handRotateSpeed * Time.deltaTime);
-                     _ableToDrink = false;
+                    _ableToDrink = false;
                 }
                 else
                 {
                     jointTransform.rotation = Quaternion.RotateTowards(jointTransform.rotation, Quaternion.AngleAxis(-135, Camera.main.transform.right), handRotateSpeed * Time.deltaTime);
                     _ableToDrink = true;
                 }
+                Debug.Log("PourMotion");
+
                 break;
         }
     }
@@ -529,7 +549,7 @@ public class PlayerActions : MonoBehaviour
         //        #endregion
         //}}
 
-        #endregion 
+        #endregion
 
         DisplaySelectedDrinks();
 
