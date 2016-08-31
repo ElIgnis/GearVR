@@ -4,6 +4,8 @@ using System.Collections;
 public class ModelAnimation : MonoBehaviour {
 
     Animation anim;
+    public string animName;
+    public bool playIdle;
 
 	// Use this for initialization
 	void Start () {
@@ -12,7 +14,7 @@ public class ModelAnimation : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-	    if(anim.isPlaying == false)
+        if (playIdle && anim.isPlaying == false)
         {
             anim.Play();
         }
@@ -20,6 +22,6 @@ public class ModelAnimation : MonoBehaviour {
 
     void OnCollisionEnter()
     {
-        anim.Play("SideGuy_Hit", PlayMode.StopAll);
+        anim.Play(animName, PlayMode.StopAll);
     }
 }

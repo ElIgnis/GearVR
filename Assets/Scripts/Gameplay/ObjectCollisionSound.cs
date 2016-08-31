@@ -3,11 +3,11 @@ using System.Collections;
 
 public class ObjectCollisionSound : MonoBehaviour {
 
-    public AudioClip bottleSmashSound;
+    public AudioClip soundToPlay;
 
     void OnCollisionEnter(Collision other)
     {
         //Sound 
-        AudioSource.PlayClipAtPoint(bottleSmashSound, transform.position);
+        AudioSource.PlayClipAtPoint(soundToPlay, transform.position);
     }
 }

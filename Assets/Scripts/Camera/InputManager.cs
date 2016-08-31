@@ -1,20 +1,17 @@
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 public class InputManager : MonoBehaviour
 {
-
-    public TextMesh debugText;
+    public UnityStandardAssets.ImageEffects.MotionBlur motionblur;
     PlayerActions _playerActions;
-
+    
     private RaycastHit _hit;
     private Ray _ray;
     public GameObject _targetObject;
     public GameObject _reticle;
-
-    AudioSource fxSound;
-    public AudioClip backMusic;
 
     // Use this for initialization
     void Start()
@@ -24,12 +21,8 @@ public class InputManager : MonoBehaviour
         _playerActions = GetComponent<PlayerActions>();
 
         Cursor.visible = false;
-
+        
         Debug.Log("InputManagerStarted");
-
-        fxSound = GetComponent<AudioSource>();
-        fxSound.Play();
-
     }
 
     void UpdateInput(object sender, System.EventArgs arg)
@@ -42,8 +35,12 @@ public class InputManager : MonoBehaviour
                 UpdateInteraction();
                 break;
             case OVRTouchpad.TouchEvent.Up:
+                motionblur.blurAmount += 0.1f;
+                Debug.Log(motionblur.blurAmount);
                 break;
             case OVRTouchpad.TouchEvent.Down:
+                motionblur.blurAmount -= 0.1f;
+                Debug.Log(motionblur.blurAmount);
                 break;
             case OVRTouchpad.TouchEvent.Left:
                 _playerActions.ThrowObject();
@@ -87,6 +84,13 @@ public class InputManager : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.S))
             _playerActions.ThrowObject();
+
+        if (Input.GetKeyDown(KeyCode.F1))
+        {
+            //SceneManager.UnloadScene(0);
+            SceneManager.LoadScene(0);
+        }
+            
 
         _playerActions.DrinkObject();
 

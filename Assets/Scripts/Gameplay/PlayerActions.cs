@@ -116,7 +116,6 @@ public class PlayerActions : MonoBehaviour
     public GameObject currentObject { get { return _currentObject; } }
 
     #region FOR_DEBUG
-    public TextMesh debugText;
     public Text _txtSrc1, _txtSrc2, _txtCompost, _txtCurrentAlcoholContent, _txtAlcoholContentOfLookingThing;
     #endregion
 

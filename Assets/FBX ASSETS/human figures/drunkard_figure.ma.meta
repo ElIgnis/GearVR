@@ -101,6 +101,7 @@ ModelImporter:
     400092: transform1
     4300000: human_rig:pCube23
     7400000: Take 001
+    7400002: Drunkard_Hit
     9500000: //RootNode
     11100000: //RootNode
     13700000: human_rig:pCube23
@@ -124,7 +125,251 @@ ModelImporter:
     animationScaleError: 0.5
     animationWrapMode: 0
     extraExposedTransformPaths: []
-    clipAnimations: []
+    clipAnimations:
+    - serializedVersion: 16
+      name: Take 001
+      takeName: Take 001
+      firstFrame: 2
+      lastFrame: 30
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 1
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Cocktail_Mixer_2_Cover1
+        weight: 1
+      - path: Cocktail_Mixer_2_Cover2
+        weight: 1
+      - path: Cocktail_Mixer_2_Cup2
+        weight: 1
+      - path: dartboard
+        weight: 1
+      - path: dartboard/transform1
+        weight: 1
+      - path: Fan
+        weight: 1
+      - path: human_rig1:figure_rig
+        weight: 1
+      - path: human_rig2:figure_rig
+        weight: 1
+      - path: human_rig3:figure_rig
+        weight: 1
+      - path: human_rig4:figure_rig
+        weight: 1
+      - path: human_rig5:figure_rig
+        weight: 1
+      - path: human_rig:figure_rig
+        weight: 1
+      - path: human_rig:figure_rig/human_rig:pCube23
+        weight: 1
+      - path: human_rig:figure_rig/human_rig:pelvis
+        weight: 1
+      - path: human_rig:figure_rig/human_rig:pelvis/human_rig:l_hip
+        weight: 1
+      - path: human_rig:figure_rig/human_rig:pelvis/human_rig:l_hip/human_rig:l_knee
+        weight: 1
+      - path: human_rig:figure_rig/human_rig:pelvis/human_rig:l_hip/human_rig:l_knee/human_rig:l_foot
+        weight: 1
+      - path: human_rig:figure_rig/human_rig:pelvis/human_rig:l_hip/human_rig:l_knee/human_rig:l_foot/human_rig:l_toe
+        weight: 1
+      - path: human_rig:figure_rig/human_rig:pelvis/human_rig:r_hip
+        weight: 1
+      - path: human_rig:figure_rig/human_rig:pelvis/human_rig:r_hip/human_rig:r_knee
+        weight: 1
+      - path: human_rig:figure_rig/human_rig:pelvis/human_rig:r_hip/human_rig:r_knee/human_rig:r_foot
+        weight: 1
+      - path: human_rig:figure_rig/human_rig:pelvis/human_rig:r_hip/human_rig:r_knee/human_rig:r_foot/human_rig:r_toe
+        weight: 1
+      - path: human_rig:figure_rig/human_rig:pelvis/human_rig:spine_1
+        weight: 1
+      - path: human_rig:figure_rig/human_rig:pelvis/human_rig:spine_1/human_rig:spine_2
+        weight: 1
+      - path: human_rig:figure_rig/human_rig:pelvis/human_rig:spine_1/human_rig:spine_2/human_rig:l_clav
+        weight: 1
+      - path: human_rig:figure_rig/human_rig:pelvis/human_rig:spine_1/human_rig:spine_2/human_rig:l_clav/human_rig:l_shoulder
+        weight: 1
+      - path: human_rig:figure_rig/human_rig:pelvis/human_rig:spine_1/human_rig:spine_2/human_rig:l_clav/human_rig:l_shoulder/human_rig:l_elbow
+        weight: 1
+      - path: human_rig:figure_rig/human_rig:pelvis/human_rig:spine_1/human_rig:spine_2/human_rig:l_clav/human_rig:l_shoulder/human_rig:l_elbow/human_rig:l_wrist
+        weight: 1
+      - path: human_rig:figure_rig/human_rig:pelvis/human_rig:spine_1/human_rig:spine_2/human_rig:l_clav/human_rig:l_shoulder/human_rig:l_elbow/human_rig:l_wrist/human_rig:l_hand
+        weight: 1
+      - path: human_rig:figure_rig/human_rig:pelvis/human_rig:spine_1/human_rig:spine_2/human_rig:neck
+        weight: 1
+      - path: human_rig:figure_rig/human_rig:pelvis/human_rig:spine_1/human_rig:spine_2/human_rig:neck/human_rig:Head
+        weight: 1
+      - path: human_rig:figure_rig/human_rig:pelvis/human_rig:spine_1/human_rig:spine_2/human_rig:neck/human_rig:Head/human_rig:Head_end
+        weight: 1
+      - path: human_rig:figure_rig/human_rig:pelvis/human_rig:spine_1/human_rig:spine_2/human_rig:r_clav
+        weight: 1
+      - path: human_rig:figure_rig/human_rig:pelvis/human_rig:spine_1/human_rig:spine_2/human_rig:r_clav/human_rig:r_shoulder
+        weight: 1
+      - path: human_rig:figure_rig/human_rig:pelvis/human_rig:spine_1/human_rig:spine_2/human_rig:r_clav/human_rig:r_shoulder/human_rig:r_elbow
+        weight: 1
+      - path: human_rig:figure_rig/human_rig:pelvis/human_rig:spine_1/human_rig:spine_2/human_rig:r_clav/human_rig:r_shoulder/human_rig:r_elbow/human_rig:r_wrist
+        weight: 1
+      - path: human_rig:figure_rig/human_rig:pelvis/human_rig:spine_1/human_rig:spine_2/human_rig:r_clav/human_rig:r_shoulder/human_rig:r_elbow/human_rig:r_wrist/human_rig:r_hand
+        weight: 1
+      - path: pCylinder10
+        weight: 1
+      - path: pCylinder33
+        weight: 1
+      - path: pCylinder33/polySurface26
+        weight: 1
+      - path: pCylinder33/polySurface26/polySurface38
+        weight: 1
+      - path: pCylinder33/polySurface26/polySurface38/polySurface40
+        weight: 1
+      - path: pCylinder33/polySurface26/polySurface38/polySurface40/polySurface42
+        weight: 1
+      - path: pCylinder33/polySurface26/polySurface38/polySurface40/polySurface42/polySurface44
+        weight: 1
+      - path: polySurface9
+        weight: 1
+      - path: polySurface9/polySurface14
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: Drunkard_Hit
+      takeName: Take 001
+      firstFrame: 30
+      lastFrame: 90
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Cocktail_Mixer_2_Cover1
+        weight: 1
+      - path: Cocktail_Mixer_2_Cover2
+        weight: 1
+      - path: Cocktail_Mixer_2_Cup2
+        weight: 1
+      - path: dartboard
+        weight: 1
+      - path: dartboard/transform1
+        weight: 1
+      - path: Fan
+        weight: 1
+      - path: human_rig1:figure_rig
+        weight: 1
+      - path: human_rig2:figure_rig
+        weight: 1
+      - path: human_rig3:figure_rig
+        weight: 1
+      - path: human_rig4:figure_rig
+        weight: 1
+      - path: human_rig5:figure_rig
+        weight: 1
+      - path: human_rig:figure_rig
+        weight: 1
+      - path: human_rig:figure_rig/human_rig:pCube23
+        weight: 1
+      - path: human_rig:figure_rig/human_rig:pelvis
+        weight: 1
+      - path: human_rig:figure_rig/human_rig:pelvis/human_rig:l_hip
+        weight: 1
+      - path: human_rig:figure_rig/human_rig:pelvis/human_rig:l_hip/human_rig:l_knee
+        weight: 1
+      - path: human_rig:figure_rig/human_rig:pelvis/human_rig:l_hip/human_rig:l_knee/human_rig:l_foot
+        weight: 1
+      - path: human_rig:figure_rig/human_rig:pelvis/human_rig:l_hip/human_rig:l_knee/human_rig:l_foot/human_rig:l_toe
+        weight: 1
+      - path: human_rig:figure_rig/human_rig:pelvis/human_rig:r_hip
+        weight: 1
+      - path: human_rig:figure_rig/human_rig:pelvis/human_rig:r_hip/human_rig:r_knee
+        weight: 1
+      - path: human_rig:figure_rig/human_rig:pelvis/human_rig:r_hip/human_rig:r_knee/human_rig:r_foot
+        weight: 1
+      - path: human_rig:figure_rig/human_rig:pelvis/human_rig:r_hip/human_rig:r_knee/human_rig:r_foot/human_rig:r_toe
+        weight: 1
+      - path: human_rig:figure_rig/human_rig:pelvis/human_rig:spine_1
+        weight: 1
+      - path: human_rig:figure_rig/human_rig:pelvis/human_rig:spine_1/human_rig:spine_2
+        weight: 1
+      - path: human_rig:figure_rig/human_rig:pelvis/human_rig:spine_1/human_rig:spine_2/human_rig:l_clav
+        weight: 1
+      - path: human_rig:figure_rig/human_rig:pelvis/human_rig:spine_1/human_rig:spine_2/human_rig:l_clav/human_rig:l_shoulder
+        weight: 1
+      - path: human_rig:figure_rig/human_rig:pelvis/human_rig:spine_1/human_rig:spine_2/human_rig:l_clav/human_rig:l_shoulder/human_rig:l_elbow
+        weight: 1
+      - path: human_rig:figure_rig/human_rig:pelvis/human_rig:spine_1/human_rig:spine_2/human_rig:l_clav/human_rig:l_shoulder/human_rig:l_elbow/human_rig:l_wrist
+        weight: 1
+      - path: human_rig:figure_rig/human_rig:pelvis/human_rig:spine_1/human_rig:spine_2/human_rig:l_clav/human_rig:l_shoulder/human_rig:l_elbow/human_rig:l_wrist/human_rig:l_hand
+        weight: 1
+      - path: human_rig:figure_rig/human_rig:pelvis/human_rig:spine_1/human_rig:spine_2/human_rig:neck
+        weight: 1
+      - path: human_rig:figure_rig/human_rig:pelvis/human_rig:spine_1/human_rig:spine_2/human_rig:neck/human_rig:Head
+        weight: 1
+      - path: human_rig:figure_rig/human_rig:pelvis/human_rig:spine_1/human_rig:spine_2/human_rig:neck/human_rig:Head/human_rig:Head_end
+        weight: 1
+      - path: human_rig:figure_rig/human_rig:pelvis/human_rig:spine_1/human_rig:spine_2/human_rig:r_clav
+        weight: 1
+      - path: human_rig:figure_rig/human_rig:pelvis/human_rig:spine_1/human_rig:spine_2/human_rig:r_clav/human_rig:r_shoulder
+        weight: 1
+      - path: human_rig:figure_rig/human_rig:pelvis/human_rig:spine_1/human_rig:spine_2/human_rig:r_clav/human_rig:r_shoulder/human_rig:r_elbow
+        weight: 1
+      - path: human_rig:figure_rig/human_rig:pelvis/human_rig:spine_1/human_rig:spine_2/human_rig:r_clav/human_rig:r_shoulder/human_rig:r_elbow/human_rig:r_wrist
+        weight: 1
+      - path: human_rig:figure_rig/human_rig:pelvis/human_rig:spine_1/human_rig:spine_2/human_rig:r_clav/human_rig:r_shoulder/human_rig:r_elbow/human_rig:r_wrist/human_rig:r_hand
+        weight: 1
+      - path: pCylinder10
+        weight: 1
+      - path: pCylinder33
+        weight: 1
+      - path: pCylinder33/polySurface26
+        weight: 1
+      - path: pCylinder33/polySurface26/polySurface38
+        weight: 1
+      - path: pCylinder33/polySurface26/polySurface38/polySurface40
+        weight: 1
+      - path: pCylinder33/polySurface26/polySurface38/polySurface40/polySurface42
+        weight: 1
+      - path: pCylinder33/polySurface26/polySurface38/polySurface40/polySurface42/polySurface44
+        weight: 1
+      - path: polySurface9
+        weight: 1
+      - path: polySurface9/polySurface14
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
     isReadable: 1
   meshes:
     lODScreenPercentages: []

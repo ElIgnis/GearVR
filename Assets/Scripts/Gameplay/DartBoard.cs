@@ -30,9 +30,9 @@ public class DartBoard : MonoBehaviour
             float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
             angle += 180.0f;
 
-            int finalAngle = (int)angle / scoreAmount.Length;
-            _score = scoreAmount[finalAngle];
+            int tempScore = Random.Range((int)0, (int)19);
 
+            _score = scoreAmount[tempScore];
             ////Distance calculation - Outer Bullseye
             //if(distance < 0.5f)
             //{

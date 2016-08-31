@@ -3,6 +3,7 @@ using System.Collections;
 
 	public enum OBJECT_TYPE{
 		DRINKS,
+        POTION,
         COCKTAIL,
 		OTHERS
 	}
@@ -20,7 +21,7 @@ public class InteractableObjects : MonoBehaviour {
     public DRINK_TYPE drinkType;
 
     public GLASS_STATE currentState;
-    public int currentAlcoholContent;
+    public int currentAlcoholContent = 0;
 
     private int[] AlcoholContent = { 
                              6,  // Beer
